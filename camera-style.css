@@ -4,70 +4,71 @@ body, html {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* 스크롤바가 절대로 생기지 않도록 고정 */
+    overflow: hidden;
     background-color: #000;
 }
 
 /* ===== 앱 전체 컨테이너 (버튼의 기준점) ===== */
 .app-container {
-    position: relative; /* 하단 버튼(.controls)의 위치 기준점이 됨 */
+    position: relative; 
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* 수직 중앙 정렬 */
-    align-items: center;     /* 수평 중앙 정렬 */
-    padding: 0; /* 불필요한 여백 제거 */
+    justify-content: center;
+    align-items: center;     
+    padding: 0; 
     box-sizing: border-box;
 }
 
-/* ===== 카메라와 프레임을 묶는 컨테이너 (이미지 비율) ===== */
+/* ===== 카메라와 프레임을 묶는 컨테이너 (기준점) ===== */
 .camera-container {
-    position: relative; /* 자식 요소(버튼, 비디오)의 기준점 */
-    width: 95vw; /* 화면 너비의 95%를 사용 */
-    max-width: 500px; /* PC 등 큰 화면에서 너무 커지지 않도록 제한 */
+    /* ★★★ 1. 부모 기준점 설정 ★★★ */
+    position: relative; 
+    width: 95vw; 
+    max-width: 500px;
     
-    /* ★★★ (필수) 'filter-economy.png'의 실제 너비/높이로 수정하세요 ★★★ */
+    /* (필수) 'filter-economy.png'의 실제 너비/높이로 수정하세요 */
     aspect-ratio: [새 이미지 너비] / [새 이미지 높이]; 
-    /* 예: 1200 / 1600 또는 1500 / 1500 등 */
+    /* 예: 1200 / 1600 */
 
-    /* 화면 세로 크기보다 커지지 않도록 제한 (가로로 넓은 기기 대응) */
     max-height: 100%;
-
     overflow: hidden;
-    border-radius: 20px; /* 모서리를 부드럽게 */
-    box-shadow: 0 0 20px rgba(0,0,0,0.5); /* 입체감 효과 */
+    border-radius: 20px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.5); 
 }
 
-/* ===== 카메라 영상 ===== */
+/* ===== 카메라 영상 (아래쪽 레이어) ===== */
 #camera-view {
-    position: absolute;
+    /* ★★★ 2. 부모 기준으로 겹치기 (1번 레이어) ★★★ */
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; 
-    object-fit: cover; /* 컨테이너를 가득 채우도록 설정 (중요!) */
-    transform: scaleX(-1); /* 전면 카메라 좌우 반전 */
+    z-index: 1; /* 카메라가 아래에 깔림 */
+    object-fit: cover; 
+    transform: scaleX(-1); 
 }
 
-/* ===== 필터 이미지 (PNG) ===== */
+/* ===== 필터 이미지 (PNG) (위쪽 레이어) ===== */
 .overlay-image {
-    position: absolute;
+    /* ★★★ 3. 부모 기준으로 겹치기 (2번 레이어) ★★★ */
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 5;
-    pointer-events: none; /* 프레임 뒤의 요소가 터치되도록 설정 */
+    z-index: 5; /* 필터가 위에 올라옴 */
+    pointer-events: none; 
 }
 
 /* ===== 화면전환 버튼 (오른쪽 상단) ===== */
 #switch-camera-button {
-    position: absolute;
+    position: absolute; /* .camera-container 기준 */
     top: 15px;
     right: 15px;
-    z-index: 10;
+    z-index: 10; /* 제일 위에 있음 */
     padding: 8px 12px;
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.7);
@@ -80,11 +81,11 @@ body, html {
 
 /* ===== 하단 버튼 영역 (화면 하단에 고정) ===== */
 .controls {
-    position: absolute;
-    bottom: 30px;     /* 화면 하단에서 30px 띄움 (값 조절 가능) */
-    left: 0;          /* 수평 정렬을 위해 0으로 설정 */
-    right: 0;         /* 수평 정렬을 위해 0으로 설정 */
-    z-index: 10;      /* 카메라 위에 표시되도록 */
+    position: absolute; /* .app-container 기준 */
+    bottom: 30px;     
+    left: 0;          
+    right: 0;         
+    z-index: 10;      
 
     display: flex;
     justify-content: center;
